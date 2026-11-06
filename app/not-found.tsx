@@ -1,0 +1,1 @@
+import Link from "next/link";export default function NotFound(){return <section className="container empty page"><small>404 • PAGE NOT FOUND</small><h1>This page took a wrong turn.</h1><p>Let’s get you back to useful things.</p><Link className="btn primary" href="/">Back to home</Link></section>}

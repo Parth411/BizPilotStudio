@@ -1,0 +1,2 @@
+"use client";import {useState} from "react";import {Check,ShoppingBag} from "lucide-react";import type {Product} from "@/lib/products";import {useCart} from "@/components/cart-provider";
+export function AddToCart({product}:{product:Product}){const{add}=useCart();const[done,setDone]=useState(false);return <button className="btn primary" onClick={()=>{add(product);setDone(true);window.setTimeout(()=>setDone(false),1400);}}>{done?<Check size={17}/>:<ShoppingBag size={17}/>} {done?"Added to cart":"Add to cart"}</button>}
