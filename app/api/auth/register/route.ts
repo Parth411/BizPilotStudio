@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   consumeRateLimit,
-  createSession,
   hashPassword,
   normalizeEmail,
 } from '@/lib/auth';
 import { sql } from '@/lib/db';
+import { sendVerificationEmail } from '@/lib/email';
 
 export const runtime = 'nodejs';
 
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = await hashPassword(String(data.password ?? ''));
     const rows = await sql`
-      INSERT INTO customers (email, password_hash, first_name, last_name, phone)
-      VALUES (${email}, ${passwordHash}, ${firstName}, ${lastName}, ${phone})
+      INSERT INTO customers (email, password_hash, first_name, last_name, phone, email_verified_at)
+      VALUES (${email}, ${passwordHash}, ${firstName}, ${lastName}, ${phone}, NULL)
       ON CONFLICT (email) DO NOTHING
       RETURNING id, email, first_name, last_name
     `;
@@ -74,8 +74,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await createSession(String(rows[0].id));
-    return NextResponse.json({ customer: rows[0] }, { status: 201 });
+    let emailSent = false;
+    try {
+      emailSent = await sendVerificationEmail({
+        id: String(rows[0].id),
+        email: String(rows[0].email),
+        first_name: String(rows[0].first_name),
+      });
+    } catch (error) {
+      console.error('[auth/register] Verification email could not be queued:', error);
+    }
+    return NextResponse.json({ verificationRequired: true, emailSent }, { status: 201 });
   } catch (error) {
     console.error('[auth/register] Registration failed:', error);
     if (error instanceof Error && (

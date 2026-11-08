@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     }
 
     const rows = await sql`
-      SELECT id, email, password_hash, first_name, last_name
+      SELECT id, email, password_hash, first_name, last_name, email_verified_at
       FROM customers
       WHERE email = ${email}
       LIMIT 1
@@ -109,6 +109,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Email or password is incorrect.' },
         { status: 401 },
+      );
+    }
+
+    if (!customer.email_verified_at) {
+      return NextResponse.json(
+        { error: 'Verify your email address before signing in.', emailNotVerified: true },
+        { status: 403 },
       );
     }
 

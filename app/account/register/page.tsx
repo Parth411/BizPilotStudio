@@ -8,7 +8,7 @@ export default function Page() {
       <div className="intro">
         <small>MY ACCOUNT</small>
         <h1>Create your BizPilot account.</h1>
-        <p>Sign in to manage purchases and access your downloads.</p>
+        <p>Create your account, then verify your email to access purchases and downloads.</p>
       </div>
       <div className="summary">
         <Suspense fallback={<p>Loading registration form…</p>}>

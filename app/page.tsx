@@ -1,5 +1,31 @@
+import type { Metadata } from "next";
 import Link from "next/link";import {ArrowRight,ArrowUpRight,CheckCircle2,Download,ShieldCheck} from "lucide-react";import {products,categories} from "@/lib/products";import {ProductCard} from "@/components/product-card";import {ProductVisual} from "@/components/product-visual";
-export default function Home(){return <><section className="hero"><div className="container herogrid"><div><div className="kicker">● &nbsp; DIGITAL TOOLS FOR AMBITIOUS BUSINESSES</div><h1>Build a better business.<br/><em>One smart tool</em> at a time.</h1><p>Thoughtful templates, trackers and resources that make everyday business work simpler, clearer and more organised.</p><div className="actions"><Link className="btn primary" href="/shop">Explore the collection <ArrowRight size={17}/></Link><Link className="textlink" href="/about">Get to know us <ArrowUpRight size={16}/></Link></div><div className="proof"><span><CheckCircle2/> Practical and editable</span><span><Download/> Digital resources</span></div></div><div className="heroart"><div className="hero-product"><ProductVisual type="sheet"/></div><div className="float f1"><ShieldCheck/> <span><b>Made to be useful</b><small>Tools for real workflows</small></span></div><div className="float f2">✦ <span><b>Work smarter</b><small>More clarity, less busywork</small></span></div></div></div><div className="container herofoot">DESIGNED FOR SMALL BUSINESSES <span>TOOLS • TEMPLATES • RESOURCES</span><span>RUN YOUR BUSINESS SMARTER ↗</span></div></section>
+
+export const metadata: Metadata = {
+  title: "Business Templates & Digital Tools for Small Businesses",
+  description: "Shop practical business templates and digital tools from BizPilot Studio. Organise leads, clients, quotations, projects, invoices and expenses with editable resources.",
+  alternates: { canonical: "/" },
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "BizPilot Studio",
+      url: "https://www.bizpilotstudio.com",
+      logo: "https://www.bizpilotstudio.com/bizpilot-logo-lockup.png",
+      email: "vichhiparth2@gmail.com",
+    },
+    {
+      "@type": "WebSite",
+      name: "BizPilot Studio",
+      url: "https://www.bizpilotstudio.com",
+      inLanguage: "en",
+    },
+  ],
+};
+export default function Home(){return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(organizationSchema).replace(/</g,"\\u003c")}}/><section className="hero"><div className="container herogrid"><div><div className="kicker">● &nbsp; DIGITAL TOOLS FOR AMBITIOUS BUSINESSES</div><h1>Build a better business.<br/><em>One smart tool</em> at a time.</h1><p>Thoughtful templates, trackers and resources that make everyday business work simpler, clearer and more organised.</p><div className="actions"><Link className="btn primary" href="/shop">Explore the collection <ArrowRight size={17}/></Link><Link className="textlink" href="/about">Get to know us <ArrowUpRight size={16}/></Link></div><div className="proof"><span><CheckCircle2/> Practical and editable</span><span><Download/> Digital resources</span></div></div><div className="heroart"><div className="hero-product"><ProductVisual type="sheet"/></div><div className="float f1"><ShieldCheck/> <span><b>Made to be useful</b><small>Tools for real workflows</small></span></div><div className="float f2">✦ <span><b>Work smarter</b><small>More clarity, less busywork</small></span></div></div></div><div className="container herofoot">DESIGNED FOR SMALL BUSINESSES <span>TOOLS • TEMPLATES • RESOURCES</span><span>RUN YOUR BUSINESS SMARTER ↗</span></div></section>
 <section className="trust"><div className="container trustgrid"><span>01 &nbsp; Simple to use</span><span>02 &nbsp; Easy to customise</span><span>03 &nbsp; Made for real workflows</span><span>04 &nbsp; Digital-first convenience</span></div></section>
 <section className="section container"><div className="sectionhead"><div><small>FIND YOUR NEXT SMART MOVE</small><h2>Tools for every part<br/>of your business.</h2></div><Link className="textlink" href="/shop">View all products ↗</Link></div><div className="categories">{categories.slice(0,4).map((c,i)=><Link className={`category cat${i}`} key={c.slug} href={`/shop?category=${c.slug}`}><small>0{i+1}</small><div><h3>{c.name}</h3><p>{c.description}</p></div><b>↗</b></Link>)}</div></section>
 <section className="featured"><div className="container"><div className="sectionhead"><div><small>THE CUSTOMER FAVOURITES</small><h2>Made to make work<br/>feel a little easier.</h2></div><Link className="btn outline" href="/shop">Shop all products <ArrowRight size={16}/></Link></div><div className="products">{products.slice(0,4).map(p=><ProductCard key={p.slug} product={p}/>)}</div></div></section>

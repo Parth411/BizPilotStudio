@@ -38,7 +38,7 @@ export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const { count } = useCart();
-  const { country, setCountry } = useCurrency();
+  const { country, setCountry, price } = useCurrency();
 
   const links = [
     ["Home", "/"],
@@ -123,7 +123,7 @@ export function SiteHeader() {
   return (
     <header className="header">
       <div className="announcement">
-        Practical digital tools for businesses that want to grow smarter
+        <Link href="/products/small-business-management-workbook">Diwali offer · 69% off · Now {price(399)} (was {price(1299)}) <span>Shop the workbook →</span></Link>
       </div>
       <div className="nav container">
         <Link href="/" className="brand" aria-label="BizPilot Studio home">

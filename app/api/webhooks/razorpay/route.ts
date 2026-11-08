@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { sql } from '@/lib/db';
+import { sendOrderConfirmation, sendRefundConfirmation } from '@/lib/email';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest) {
           UPDATE customer_orders SET status = 'paid', paid_at = COALESCE(paid_at, NOW())
           WHERE id = ${saved.id} AND status IN ('pending', 'failed', 'paid')
         `;
+        await sendOrderConfirmation(String(saved.id));
       } else {
         // Keep the webhook retryable if the corresponding order has not appeared yet.
         return NextResponse.json({ error: 'Order not found for captured payment.' }, { status: 404 });
@@ -126,6 +128,7 @@ export async function POST(request: NextRequest) {
             END
         WHERE id = ${paymentRows[0].order_id}
       `;
+      await sendRefundConfirmation(String(paymentRows[0].order_id), refundId, refundAmount);
     }
 
     await sql`UPDATE razorpay_webhook_events SET status = 'processed', processed_at = NOW() WHERE event_id = ${eventId}`;

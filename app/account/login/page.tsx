@@ -8,7 +8,7 @@ export default function Page() {
       <div className="intro">
         <small>MY ACCOUNT</small>
         <h1>Sign in to your account.</h1>
-        <p>Sign in to manage purchases and access your downloads.</p>
+        <p>Sign in to manage purchases and access your downloads. Your email must be verified.</p>
       </div>
       <div className="summary">
         <Suspense fallback={<p>Loading sign-in form…</p>}>

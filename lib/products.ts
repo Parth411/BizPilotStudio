@@ -21,9 +21,10 @@ export const products: Product[] = [
     categorySlug: "business-tools",
     description:
       "A branded Excel command center to organise leads, clients, services, quotations, projects, invoices, payments and expenses in one place.",
-    price: 799,
+    price: 399,
+    oldPrice: 1299,
     format: "Microsoft Excel (.xlsx)",
-    badge: "First release",
+    badge: "Diwali offer",
     visual: "sheet",
     features: [
       "Business dashboard with key operating metrics",

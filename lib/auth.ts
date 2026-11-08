@@ -136,6 +136,7 @@ export async function getCurrentCustomer() {
     JOIN customers c ON c.id = s.customer_id
     WHERE s.token_hash = ${digest(token)}
       AND s.expires_at > NOW()
+      AND c.email_verified_at IS NOT NULL
     LIMIT 1
   `;
 

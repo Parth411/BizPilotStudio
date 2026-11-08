@@ -28,7 +28,8 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const market = pricingForCountry(country);
   const value = useMemo(() => ({ country, setCountry, ready, currency: market.currency, price: (inr: number, quantity = 1) => {
     const current = pricingForCountry(country);
-    const amount = (inr === 799 ? current.amount : inr) * quantity;
+    const unitAmount = inr === 399 ? current.amount : inr === 1299 ? current.originalAmount : inr;
+    const amount = unitAmount * quantity;
     return new Intl.NumberFormat(current.locale, { style: "currency", currency: current.currency }).format(amount);
   }}), [country, ready]);
   return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;
