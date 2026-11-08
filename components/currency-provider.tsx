@@ -1,8 +1,9 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { pricingForCountry } from "@/lib/pricing";
+import { priceForProduct } from "@/lib/pricing";
 
-type CurrencyContextValue = { country: string; setCountry: (country: string) => void; ready: boolean; price: (inr: number, quantity?: number) => string; currency: string };
+type CurrencyContextValue = { country: string; setCountry: (country: string) => void; ready: boolean; price: (inr: number, quantity?: number) => string; priceProduct: (slug: string, fallbackInr: number, quantity?: number) => string; priceProducts: (items: Array<{ slug: string; fallbackInr: number; quantity: number }>) => string; currency: string };
 const CurrencyContext = createContext<CurrencyContextValue | null>(null);
 
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
@@ -26,9 +27,17 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const setCountry = (next: string) => { setCountryState(next); window.localStorage.setItem("bizpilot-country", next); };
   const market = pricingForCountry(country);
-  const value = useMemo(() => ({ country, setCountry, ready, currency: market.currency, price: (inr: number, quantity = 1) => {
+  const value = useMemo(() => ({ country, setCountry, ready, currency: market.currency, priceProduct: (slug: string, fallbackInr: number, quantity = 1) => {
     const current = pricingForCountry(country);
-    const unitAmount = inr === 399 ? current.amount : inr === 1299 ? current.originalAmount : inr;
+    const amount = priceForProduct(slug, country, fallbackInr) * quantity;
+    return new Intl.NumberFormat(current.locale, { style: "currency", currency: current.currency }).format(amount);
+  }, priceProducts: (items: Array<{ slug: string; fallbackInr: number; quantity: number }>) => {
+    const current = pricingForCountry(country);
+    const amount = items.reduce((total, item) => total + priceForProduct(item.slug, country, item.fallbackInr) * item.quantity, 0);
+    return new Intl.NumberFormat(current.locale, { style: "currency", currency: current.currency }).format(amount);
+  }, price: (inr: number, quantity = 1) => {
+    const current = pricingForCountry(country);
+    const unitAmount = inr === 399 ? current.amount : inr === 1299 ? current.originalAmount : inr === 499 ? current.starterAmount : inr;
     const amount = unitAmount * quantity;
     return new Intl.NumberFormat(current.locale, { style: "currency", currency: current.currency }).format(amount);
   }}), [country, ready]);

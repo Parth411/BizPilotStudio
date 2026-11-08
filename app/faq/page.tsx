@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Mail, ShieldCheck, Download, CreditCard } from "lucide-react";
 
 const faqs = [
-  { question: "What does BizPilot Studio sell?", answer: "BizPilot Studio sells practical digital resources for small businesses and independent professionals. The current catalogue includes the Small Business Management Workbook, an editable Excel tool for everyday business operations." },
-  { question: "Are the products physical items?", answer: "No. The planned catalogue consists of digital resources. Each product page will state its file format and what is included so you can check compatibility before purchasing." },
-  { question: "Can I purchase and download products right now?", answer: "Yes. You can purchase the Small Business Management Workbook through secure checkout. After payment is verified, the order and download are available through your BizPilot Studio account." },
+  { question: "What does BizPilot Studio sell?", answer: "BizPilot Studio offers practical digital resources for small businesses, including the Small Business Management Workbook and the online Business Starter System for idea validation, startup planning and profit calculations." },
+  { question: "Are the products physical items?", answer: "No. These are digital products. The workbook is an editable Excel download, while the Business Starter System is an online tool with account-linked saved plans and data export." },
+  { question: "How do I access my purchase?", answer: "After payment is verified, your order appears in your BizPilot Studio account. Download the workbook from My products, or open the Business Starter System from your library." },
   { question: "Will I be able to edit the templates?", answer: "Editability depends on the product. The product page will identify the format, such as Excel, Google Sheets, Word, PowerPoint, PDF or Canva, and explain what can be edited." },
   { question: "Can I ask for help before buying?", answer: "Yes. Send your question with the product name and we will respond by email. You can also ask about file formats or whether a resource suits your workflow." },
   { question: "Where can I read the refund and licence terms?", answer: "Read the Terms of Use and Refund Policy linked in the footer. For questions, contact vichhiparth2@gmail.com." },
@@ -27,7 +27,7 @@ export default function FAQPage() {
       </div>
       <div className="faq-notice">
         <ShieldCheck size={20} />
-        <div><strong>Digital delivery</strong><p>Verified purchases are saved to your account, where you can access your order and workbook download.</p></div>
+        <div><strong>Digital delivery</strong><p>Verified purchases are saved to your account, where you can open online tools or access protected downloads.</p></div>
       </div>
       <div className="faq-list">
         {faqs.map((faq, index) => (

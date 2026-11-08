@@ -2,19 +2,19 @@
 import Script from "next/script";
 import { useState } from "react";
 import { LockKeyhole, LoaderCircle } from "lucide-react";
-const PRODUCT_SLUG = "small-business-management-workbook";
+type CheckoutItem = { slug: string; fallbackInr: number; quantity: number };
 type RazorpayResult = { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string };
 type RazorpayInstance = { open: () => void; on: (event: "payment.failed", handler: (response: { error?: { description?: string; reason?: string; code?: string } }) => void) => void };
 type RazorpayOptions = { key: string; amount: number; currency: string; name: string; description: string; order_id: string; prefill: { email: string }; theme: { color: string }; handler: (result: RazorpayResult) => void; modal: { ondismiss: () => void } };
 declare global { interface Window { Razorpay?: new (options: RazorpayOptions) => RazorpayInstance } }
-export function RazorpayCheckout({ country, priceLabel, quantity = 1 }: { country: string; priceLabel: string; quantity?: number }) {
+export function RazorpayCheckout({ country, priceLabel, items }: { country: string; priceLabel: string; items: CheckoutItem[] }) {
   const [busy,setBusy]=useState(false); const [error,setError]=useState(""); const [scriptReady,setScriptReady]=useState(false);
   async function startPayment() {
     setError("");
     if (!window.Razorpay) { setError("Secure payment window is still loading. Please try again."); return; }
     setBusy(true);
     try {
-      const response=await fetch("/api/checkout/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({slug:PRODUCT_SLUG,country,quantity})});
+      const response=await fetch("/api/checkout/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:items.map(({slug,quantity})=>({slug,quantity})),country})});
       const order=await response.json(); if(!response.ok) throw new Error(order.error||"Could not start payment.");
       const checkout=new window.Razorpay({key:order.keyId,amount:order.amount,currency:order.currency,name:"BizPilot Studio",description:order.productName,order_id:order.orderId,prefill:{email:order.email},theme:{color:"#3478F6"},
         handler:async(result)=>{try{const verifyResponse=await fetch("/api/checkout/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(result)});const verified=await verifyResponse.json();if(!verifyResponse.ok)throw new Error(verified.error||"Payment verification failed.");window.location.assign(`/success?order=${encodeURIComponent(verified.orderId)}`);}catch(e){setError(e instanceof Error?e.message:"Payment verification failed. Contact support before paying again.");setBusy(false);}},

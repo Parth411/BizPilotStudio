@@ -47,20 +47,28 @@ export default async function AccountPage() {
   const customer = await getCurrentCustomer();
   if (!customer) redirect('/account/login?next=/account');
 
-  const [orders, paidCountRows, downloadCountRows] = await Promise.all([
+  const [orders, paidCountRows, downloadCountRows, itemRows] = await Promise.all([
     sql`SELECT id, product_name, product_slug, amount, currency, status, created_at FROM customer_orders WHERE customer_id = ${customer.id} ORDER BY created_at DESC LIMIT 50`,
     sql`SELECT COUNT(*) AS total FROM customer_orders WHERE customer_id = ${customer.id} AND status = 'paid'`,
-    sql`SELECT COUNT(*) AS total FROM customer_orders WHERE customer_id = ${customer.id} AND status = 'paid' AND product_slug = 'small-business-management-workbook'`,
+    sql`SELECT COUNT(DISTINCT o.id) AS total FROM customer_orders o WHERE o.customer_id = ${customer.id} AND o.status = 'paid' AND (EXISTS (SELECT 1 FROM customer_order_items i WHERE i.order_id=o.id AND i.product_slug='small-business-management-workbook') OR (o.product_slug='small-business-management-workbook' AND NOT EXISTS (SELECT 1 FROM customer_order_items i WHERE i.order_id=o.id)))`,
+    sql`SELECT i.order_id, i.product_slug, i.product_name, o.created_at FROM customer_order_items i JOIN customer_orders o ON o.id=i.order_id WHERE o.customer_id=${customer.id} AND o.status='paid' ORDER BY o.created_at DESC`,
   ]);
 
   const paidOrderCount = Number(paidCountRows[0]?.total ?? 0);
   const downloadCount = Number(downloadCountRows[0]?.total ?? 0);
   const paidOrders = orders.filter((order: any) => order.status === 'paid');
   const productMap = new Map<string, NonNullable<ReturnType<typeof getProduct>>>();
-  for (const order of paidOrders) {
-    const product = getProduct(String(order.product_slug));
-    if (product) productMap.set(product.slug, product);
+  const productOrdersMap = new Map<string, any[]>();
+  for (const item of itemRows) {
+    const key=String(item.product_slug), list=productOrdersMap.get(key)||[];
+    list.push({id:item.order_id,product_name:item.product_name,created_at:item.created_at});
+    productOrdersMap.set(key,list);
   }
+  for (const order of paidOrders) {
+    const hasLines=itemRows.some((item:any)=>String(item.order_id)===String(order.id));
+    if(!hasLines){const product = getProduct(String(order.product_slug));if(product){productMap.set(product.slug, product);productOrdersMap.set(product.slug,[...(productOrdersMap.get(product.slug)||[]),order]);}}
+  }
+  for(const item of itemRows){const product=getProduct(String(item.product_slug));if(product)productMap.set(product.slug,product);}
   const ownedProducts = Array.from(productMap.values());
   const initials = `${customer.first_name?.[0] ?? ''}${customer.last_name?.[0] ?? ''}`.toUpperCase();
 
@@ -104,12 +112,12 @@ export default async function AccountPage() {
                 <div className="panel-heading"><div><span className="panel-kicker">YOUR LIBRARY</span><h2>My products</h2><p>Products you have purchased are collected here.</p></div><span className="panel-count">{ownedProducts.length} {ownedProducts.length === 1 ? 'product' : 'products'}</span></div>
                 {ownedProducts.length ? (
                   <div className="library-list">{ownedProducts.map((product) => {
-                    const productOrders = paidOrders.filter((order: any) => order.product_slug === product.slug);
+                    const productOrders = productOrdersMap.get(product.slug)||[];
                     const downloadable = downloadableProducts.has(product.slug);
                     return <article className="library-item" key={product.slug}>
                       <div className="library-art"><span><Box size={23} /></span></div>
                       <div className="library-info"><span className="library-category">{product.category}</span><h3>{product.name}</h3><p>{product.format} <span>·</span> Purchased {formatDate(productOrders[0].created_at)}</p></div>
-                      {downloadable ? <a className="download-button" href={`/api/download?order=${encodeURIComponent(productOrders[0].id)}`}><ArrowDownToLine size={16} /><span>Download</span></a> : <span className="library-status">Access available</span>}
+                      {downloadable ? <a className="download-button" href={`/api/download?order=${encodeURIComponent(productOrders[0].id)}&slug=${encodeURIComponent(product.slug)}`}><ArrowDownToLine size={16} /><span>Download</span></a> : <Link className="download-button" href="/tools/business-starter"><span>Open planner</span><ArrowRight size={16}/></Link>}
                     </article>;
                   })}</div>
                 ) : (
@@ -128,7 +136,7 @@ export default async function AccountPage() {
             <aside className="account-secondary-column">
               <section className="workspace-panel download-panel" id="downloads">
                 <div className="panel-heading compact"><div><span className="panel-kicker">QUICK ACCESS</span><h2>My downloads</h2></div><span className="download-total">{downloadCount}</span></div>
-                {downloadCount ? <div className="download-shortcuts">{paidOrders.filter((order: any) => downloadableProducts.has(String(order.product_slug))).slice(0, 3).map((order: any) => <a className="download-shortcut" href={`/api/download?order=${encodeURIComponent(order.id)}`} key={order.id}><span className="download-file-icon"><ArrowDownToLine size={16} /></span><span><strong>{order.product_name}</strong><small>ZIP package · {formatDate(order.created_at)}</small></span><ArrowRight size={15} /></a>)}</div> : <div className="download-empty"><ArrowDownToLine size={19} /><p>Downloads for completed purchases will appear here.</p></div>}
+                {downloadCount ? <div className="download-shortcuts">{paidOrders.filter((order: any) => downloadableProducts.has(String(order.product_slug))||itemRows.some((item:any)=>String(item.order_id)===String(order.id)&&downloadableProducts.has(String(item.product_slug)))).slice(0, 3).map((order: any) => <a className="download-shortcut" href={`/api/download?order=${encodeURIComponent(order.id)}&slug=small-business-management-workbook`} key={order.id}><span className="download-file-icon"><ArrowDownToLine size={16} /></span><span><strong>{order.product_name}</strong><small>Workbook download · {formatDate(order.created_at)}</small></span><ArrowRight size={15} /></a>)}</div> : <div className="download-empty"><ArrowDownToLine size={19} /><p>Downloads for completed purchases will appear here.</p></div>}
                 <p className="private-note"><BadgeCheck size={14} /> Files are available to the account that made the purchase.</p>
               </section>
 
