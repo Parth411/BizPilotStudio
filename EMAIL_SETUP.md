@@ -31,7 +31,7 @@ Do not run the migration against a different Neon branch than the app uses.
 - Forgot-password requests always return a generic response to avoid revealing whether an email is registered. Reset links expire after one hour, work once, and revoke active sessions after a successful reset.
 - Captured payments trigger an order confirmation through both the checkout verification path and Razorpay webhook path. The unique outbox key prevents the two paths from sending duplicate confirmations.
 - Processed refunds send a refund confirmation.
-- Failed email deliveries remain in the Neon outbox and are retried by the protected `/api/cron/emails` route. `vercel.json` schedules that route every 10 minutes. Configure `CRON_SECRET` in the hosting environment; Vercel Cron sends it as a bearer token.
+- The first delivery attempt happens immediately when the app creates an email. Failed deliveries remain in the Neon outbox and are retried by the protected `/api/cron/emails` route. `vercel.json` schedules retries once daily at 03:00 UTC to fit Vercel Hobby's cron limit. Configure `CRON_SECRET` in the hosting environment; Vercel Cron sends it as a bearer token. On Hobby, retries can take up to roughly a day; verification and password-reset links may expire before a retry, so customers can request a fresh link.
 
 ## Local and production verification
 
