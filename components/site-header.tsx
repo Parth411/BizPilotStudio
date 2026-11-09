@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ChevronDown,
+  LayoutDashboard,
   LogIn,
   LogOut,
   Menu,
@@ -183,6 +184,9 @@ export function SiteHeader() {
                     </div>
                     <Link href="/account" role="menuitem" onClick={() => setAccountOpen(false)}>
                       <UserRound size={16} /> My Account
+                    </Link>
+                    <Link href="/workspace" role="menuitem" onClick={() => setAccountOpen(false)}>
+                      <LayoutDashboard size={16} /> Business Workspace
                     </Link>
                     <Link href="/account#orders" role="menuitem" onClick={() => setAccountOpen(false)}>
                       <Package size={16} /> My Orders

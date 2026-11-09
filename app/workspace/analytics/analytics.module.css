@@ -1,0 +1,66 @@
+.page { min-height: calc(100vh - 114px); padding: 27px 24px 55px; background: radial-gradient(ellipse at 90% 0%,#eaf1fc 0,transparent 28%),#f5f7fa; }
+.shell { width: min(1250px,100%); margin: 0 auto; }
+.backLink { display: inline-flex; align-items: center; gap: 7px; color: #718196; font-size: 9px; font-weight: 700; }
+.backLink:hover { color: var(--b); }
+.header { display: flex; justify-content: space-between; align-items:flex-end; gap: 20px; margin: 17px 2px 18px; }
+.eyebrow { margin: 0 0 6px; color: var(--t); font-size: 8px; font-weight: 800; letter-spacing: .13em; }
+.header h1 { margin: 0; color: var(--n); font: 700 clamp(25px,3vw,32px)/1.2 Montserrat,sans-serif; letter-spacing: -.04em; }
+.header>div>p:not(.eyebrow) { margin: 7px 0 0; color: #718196; font-size: 10px; }
+.header strong { color: var(--n); }
+.periodForm { display: flex; align-items:flex-end; gap: 7px; }
+.periodForm label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.periodForm input[type=month] { height: 36px; padding: 0 8px; border: 1px solid #dce4ed; border-radius: 6px; background: #fff; color: #344b64; font: 9px 'Open Sans',sans-serif; }
+.periodForm button { height: 36px; padding: 0 12px; border: 0; border-radius: 6px; background: var(--n); color: white; font-size: 9px; font-weight: 700; cursor: pointer; }
+.currencyGrid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 12px; margin-bottom: 14px; }
+.currencyCard,.panel,.rankPanel,.empty { border: 1px solid #e7ecf2; border-radius: 11px; background: #fff; box-shadow: 0 6px 22px #142b4908; }
+.currencyCard { padding: 16px; }
+.cardTitle { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #edf0f4; }
+.cardTitle>span { color: var(--n); font: 700 13px Montserrat,sans-serif; }
+.cardTitle small { color: #8997a6; font-size: 8px; }
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 10px; padding-top: 13px; }
+.kpis>div:last-child { grid-column: 1/-1; padding-top: 10px; border-top: 1px solid #edf0f4; }
+.kpis small,.kpis strong,.kpis span { display: block; }
+.kpis small { color: #8795a4; font-size: 7px; font-weight: 800; letter-spacing: .08em; }
+.kpis strong { margin-top: 5px; color: var(--n); font: 700 17px Montserrat,sans-serif; }
+.kpis span { margin-top: 4px; color: #8997a6; font-size: 7px; }
+.panel { padding: 18px; margin-bottom: 14px; }
+.panelHead { display: flex; justify-content: space-between; align-items:flex-end; gap: 12px; }
+.panelHead h2 { margin: 0; color: var(--n); font: 700 15px Montserrat,sans-serif; }
+.calculationNote { color: #8997a6; font-size: 8px; }
+.chartGroup { margin-top: 16px; }
+.chartGroup h3 { margin: 0 0 7px; color: #536980; font-size: 9px; }
+.chart { height: 170px; padding: 8px 6px 0; display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 8px; border-bottom: 1px solid #e7ecf2; background: repeating-linear-gradient(to top,transparent 0,transparent 41px,#edf1f5 42px); }
+.chartColumn { min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content:flex-end; gap: 6px; }
+.bars { width: min(44px,80%); height: 142px; display: flex; align-items:flex-end; justify-content: center; gap: 3px; }
+.revenueBar,.expenseBar { width: 45%; min-height: 0; border-radius: 3px 3px 0 0; transition: height .2s ease; }
+.revenueBar { background: #3478f6; }
+.expenseBar { background: #16a085; }
+.chartColumn small { max-width: 100%; color: #8290a0; font-size: 7px; white-space: nowrap; }
+.legend { display: flex; gap: 14px; margin-top: 12px; color: #718196; font-size: 8px; }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend i { width: 8px; height: 8px; display: inline-block; border-radius: 2px; }
+.revenueSwatch { background: #3478f6; }
+.expenseSwatch { background: #16a085; }
+.rankGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.rankPanel { min-width: 0; padding: 15px; }
+.rankPanel h2 { margin: 0; color: var(--n); font: 700 12px Montserrat,sans-serif; }
+.rankPanel>div>p { margin: 4px 0 0; color: #8997a6; font-size: 8px; }
+.rankPanel ol { display: grid; gap: 9px; margin: 14px 0 0; padding: 0; list-style: none; }
+.rankPanel li { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.rank { width: 19px; height: 19px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 6px; background: #f2f6fb; color: #718196; font-size: 7px; font-weight: 800; }
+.rankText { min-width: 0; flex: 1; }
+.rankText strong,.rankText small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rankText strong { color: #475e77; font-size: 8px; }
+.rankText small { margin-top: 2px; color: #8997a6; font-size: 7px; }
+.rankPanel li>b { color: var(--n); font: 700 9px Montserrat,sans-serif; white-space: nowrap; }
+.rankEmpty { min-height: 55px; margin: 14px 0 0; color: #8997a6; font-size: 8px; line-height: 1.6; }
+.empty { max-width: 600px; margin: 30px auto; padding: 35px 25px; text-align: center; }
+.empty>span { width: 45px; height: 45px; display: grid; place-items: center; margin: 0 auto 13px; border-radius: 12px; background: #edf3ff; color: var(--b); }
+.empty h2 { margin: 0; color: var(--n); font: 700 18px Montserrat,sans-serif; }
+.empty p { color: #718196; font-size: 9px; line-height: 1.7; }
+.button { min-height: 35px; padding: 0 12px; display: inline-flex; align-items: center; gap: 7px; border-radius: 6px; background: var(--b); color: #fff; font-size: 9px; font-weight: 700; }
+.note { margin: 13px 2px; display: flex; align-items: center; gap: 7px; color: #8997a6; font-size: 8px; }
+.note svg { flex: 0 0 auto; color: #8190a0; }
+@media(max-width:900px) { .rankGrid { grid-template-columns: 1fr 1fr; } }
+@media(max-width:620px) { .page { padding: 18px 13px 35px; } .header { align-items: flex-start; flex-direction: column; } .periodForm { width: 100%; } .periodForm input[type=month] { flex: 1; } .currencyGrid { grid-template-columns: 1fr; } .rankGrid { grid-template-columns: 1fr; } .panel { padding: 14px; } .panelHead { align-items: flex-start; flex-direction: column; } .chart { gap: 3px; } .bars { width: min(38px,85%); } }
+@media(prefers-reduced-motion:reduce) { .revenueBar,.expenseBar { transition:none; } }

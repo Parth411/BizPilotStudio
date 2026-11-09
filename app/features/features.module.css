@@ -1,0 +1,25 @@
+.page{padding-top:34px;padding-bottom:90px}
+.back{display:inline-block;color:#718196;font-size:11px;margin-bottom:20px}
+.hero{padding:52px 0 64px;max-width:790px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--t);font-size:10px;font-weight:800;letter-spacing:.14em}
+.hero h1{font:800 clamp(38px,6vw,64px)/1.1 Montserrat;color:var(--n);letter-spacing:-.055em;margin:20px 0}
+.hero>p{max-width:690px;color:#718196;font-size:15px;line-height:1.9}
+.actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:28px}
+.steps{padding:48px 0;border-top:1px solid var(--line)}
+.sectionHeading small,.cta small{color:var(--t);font-size:10px;font-weight:800;letter-spacing:.14em}
+.sectionHeading h2{font:700 clamp(25px,3.5vw,38px)/1.2 Montserrat;color:var(--n);letter-spacing:-.04em;margin:12px 0 26px}
+.stepGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.stepGrid article,.detailGrid article{padding:22px;border:1px solid var(--line);background:#f8fafc;border-radius:9px}
+.stepGrid article>span{width:34px;height:34px;display:grid;place-items:center;background:#eaf2ff;color:#3478f6;border-radius:8px;font:700 12px Montserrat}
+.stepGrid h3,.detailGrid h2{font:700 16px Montserrat;color:var(--n);margin:18px 0 8px}
+.stepGrid p,.detailGrid p,.note p{font-size:11px;line-height:1.8;color:#718196;margin:0}
+.detailGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding-bottom:55px}
+.detailGrid svg{color:var(--t);width:21px;height:21px}
+.detailGrid h2{margin:12px 0 8px}
+.note{border-left:3px solid var(--t);background:#f2f8f7;padding:18px 20px;margin:0 0 50px;color:var(--n);font-size:12px}
+.note p{margin-top:7px}
+.cta{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:34px;border-radius:11px;background:linear-gradient(115deg,#142b49,#1b4772);color:#fff}
+.cta small{color:#6dd5c2}
+.cta h2{font:700 clamp(22px,3vw,32px)/1.25 Montserrat;margin:12px 0;color:#fff}
+.cta p{font-size:11px;line-height:1.7;color:#c7d5e4;margin:0}
+@media(max-width:700px){.hero{padding:35px 0 45px}.stepGrid,.detailGrid{grid-template-columns:1fr}.cta{align-items:flex-start;flex-direction:column;padding:25px}.actions{gap:15px}}
