@@ -138,6 +138,10 @@ export function ImportWorkflow({ businessId, businessName, businessCurrency }: {
 
       <section className={styles.panel} aria-labelledby="upload-heading">
         <div className={styles.panelHeading}><span className={styles.step}>1</span><div><h2 id="upload-heading">Choose a file</h2><p>CSV or XLSX · up to 2 MB · 500 data rows · one worksheet</p></div></div>
+        <div className={styles.templateHelp}>
+          <div><strong>Start with the import template</strong><p>Transaction Date and Amount are required. Add at least one transaction row. Type accepts <code>sale</code> or <code>expense</code>; if blank, the selected default below is used.</p></div>
+          <a className={styles.templateButton} href="/templates/bizpilot-import-template.xlsx" download><FileSpreadsheet size={15} /> Download Excel template</a>
+        </div>
         <form className={styles.uploadForm} onSubmit={uploadFile}>
           <label className={styles.filePicker}>
             <Upload size={19} />

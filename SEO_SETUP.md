@@ -8,13 +8,20 @@
 - Account, cart, checkout and order status pages are marked no-index; account and transaction routes are disallowed in robots.txt.
 - Product pages include Product/Offer structured data using the catalogue INR price.
 - The home page includes Organization structured data.
+- The sitemap includes both paid product pages, the AI Client Growth Copilot, and the public Business Workspace overview.
+- The sign-in-only Workspace, imports and analytics pages are explicitly no-index and are not listed in the sitemap. `/features/business-workspace` is the public, indexable overview.
 
 ## Google Search Console
 
 1. Deploy the current site to `https://www.bizpilotstudio.com` and confirm both generated URLs load: `/robots.txt` and `/sitemap.xml`.
-2. In Search Console, submit `https://www.bizpilotstudio.com/sitemap.xml` under **Sitemaps**.
-3. Use URL Inspection on the homepage and product page, then request indexing after deployment.
-4. DNS ownership verification confirms the Search Console property; it does not itself submit pages for indexing. Search Console may take time to crawl and index new pages.
+2. In Search Console, submit `https://www.bizpilotstudio.com/sitemap.xml` under **Sitemaps** after this build is deployed.
+3. Use URL Inspection and request indexing for these public pages after deployment:
+   - `https://www.bizpilotstudio.com/products/small-business-management-workbook`
+   - `https://www.bizpilotstudio.com/products/business-starter-system`
+   - `https://www.bizpilotstudio.com/tools/client-growth-copilot`
+   - `https://www.bizpilotstudio.com/features/business-workspace`
+4. Leave `/workspace` and its private imports and analytics routes out of the sitemap; they require sign-in and carry `noindex` directives.
+5. DNS ownership verification confirms the Search Console property; it does not itself submit pages for indexing. Search Console may take time to crawl and index new pages.
 
 If Google asks for HTML-tag verification as an alternative, set `GOOGLE_SITE_VERIFICATION` in the production environment to the token value Google provides (without the surrounding meta tag), then redeploy. This is optional when DNS ownership verification is already successful.
 

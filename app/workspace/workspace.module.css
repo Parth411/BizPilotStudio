@@ -87,10 +87,18 @@
 .businessDetails dt { color: #91a0ae; font-size: 8px; }
 .businessDetails dd { margin: 3px 0 0; color: #344b64; font-size: 10px; font-weight: 600; text-transform: capitalize; }
 
+.snapshotHeader { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 19px 2px 9px; }
+.snapshotHeader>div>span { color: #718196; font-size: 9px; }
+.snapshotHeader .eyebrow { margin-bottom: 3px; }
+.periodToggle { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid #e1e8f0; border-radius: 9px; background: #eef2f7; }
+.periodToggle a { min-height: 31px; padding: 0 13px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; color: #718196; font-size: 9px; font-weight: 700; }
+.periodToggle a:hover { color: var(--n); }
+.periodToggle a.periodActive { background: #fff; color: #2466df; box-shadow: 0 2px 7px #142b4910; }
 .metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 15px 0; }
 .metrics article { min-height: 112px; padding: 16px; display: flex; flex-direction: column; align-items: flex-start; }
 .metrics article span { color: #8997a6; font-size: 8px; font-weight: 800; letter-spacing: .1em; }
 .metrics article strong { margin: 8px 0 3px; color: var(--n); font: 700 24px Montserrat, sans-serif; }
+.metrics article strong.metricValue { max-width: 100%; font-size: clamp(13px,1.5vw,20px); line-height: 1.25; overflow-wrap: anywhere; }
 .metrics article small { color: #8795a4; font-size: 8px; }
 
 .nextStep { padding: 20px; display: flex; align-items: flex-start; gap: 14px; }
@@ -132,6 +140,9 @@
 }
 
 @media (max-width: 500px) {
+  .snapshotHeader { align-items: flex-start; flex-direction: column; }
+  .periodToggle { width: 100%; }
+  .periodToggle a { flex: 1; }
   .metrics { grid-template-columns: 1fr; gap: 8px; }
   .metrics article { min-height: 88px; }
   .businessCard,.nextStep { padding: 15px; }

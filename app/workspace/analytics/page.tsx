@@ -108,7 +108,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
       ), ranked AS (
         SELECT *, ROW_NUMBER() OVER (PARTITION BY currency ORDER BY total DESC, label ASC) AS rank
         FROM totals
-      ) SELECT currency, label, total FROM ranked WHERE rank <= 5 ORDER BY currency, rank
+      ) SELECT currency, label, total, rank FROM ranked WHERE rank <= 5 ORDER BY currency, rank
     `,
     sql`
       WITH totals AS (
@@ -123,7 +123,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
       ), ranked AS (
         SELECT *, ROW_NUMBER() OVER (PARTITION BY currency ORDER BY total DESC, label ASC) AS rank
         FROM totals
-      ) SELECT currency, label, total FROM ranked WHERE rank <= 5 ORDER BY currency, rank
+      ) SELECT currency, label, total, rank FROM ranked WHERE rank <= 5 ORDER BY currency, rank
     `,
     sql`
       WITH totals AS (
@@ -138,7 +138,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
       ), ranked AS (
         SELECT *, ROW_NUMBER() OVER (PARTITION BY currency ORDER BY total DESC, label ASC) AS rank
         FROM totals
-      ) SELECT currency, label, total FROM ranked WHERE rank <= 5 ORDER BY currency, rank
+      ) SELECT currency, label, total, rank FROM ranked WHERE rank <= 5 ORDER BY currency, rank
     `,
   ]);
 

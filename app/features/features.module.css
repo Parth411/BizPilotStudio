@@ -22,4 +22,5 @@
 .cta small{color:#6dd5c2}
 .cta h2{font:700 clamp(22px,3vw,32px)/1.25 Montserrat;margin:12px 0;color:#fff}
 .cta p{font-size:11px;line-height:1.7;color:#c7d5e4;margin:0}
+.workspaceLock{display:flex;align-items:center;justify-content:center;gap:7px;margin:16px auto 0;color:#7f8c9c;font-size:10px}
 @media(max-width:700px){.hero{padding:35px 0 45px}.stepGrid,.detailGrid{grid-template-columns:1fr}.cta{align-items:flex-start;flex-direction:column;padding:25px}.actions{gap:15px}}

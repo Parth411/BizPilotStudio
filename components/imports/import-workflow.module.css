@@ -12,6 +12,12 @@
 .step { width: 27px; height: 27px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 8px; background: #edf3ff; color: var(--b); font: 700 11px Montserrat,sans-serif; }
 .panelHeading h2 { margin: 1px 0 4px; color: var(--n); font: 700 14px Montserrat,sans-serif; }
 .panelHeading p { margin: 0; color: #8190a0; font-size: 9px; line-height: 1.6; }
+.templateHelp { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 12px; padding: 11px 12px; border: 1px solid #dce8fb; border-radius: 8px; background: #f6f9ff; }
+.templateHelp strong { color: var(--n); font-size: 9px; }
+.templateHelp p { margin: 4px 0 0; color: #73839a; font-size: 8px; line-height: 1.55; }
+.templateHelp code { padding: 1px 4px; border-radius: 3px; background: #e8eef8; color: #35506e; font-size: 8px; }
+.templateButton { min-height: 34px; padding: 0 10px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto; border: 1px solid #cbd9ef; border-radius: 6px; background: #fff; color: #245fbf; font-size: 8px; font-weight: 700; }
+.templateButton:hover { border-color: var(--b); background: #f0f5ff; }
 .uploadForm { display: flex; gap: 9px; align-items: center; }
 .filePicker { min-width: 0; flex: 1; min-height: 42px; padding: 0 12px; display: flex; align-items: center; gap: 9px; border: 1px dashed #cbd7e5; border-radius: 7px; color: #63758b; font-size: 10px; cursor: pointer; }
 .filePicker svg { color: var(--b); flex: 0 0 auto; }
@@ -57,6 +63,8 @@
   .headerIcon { width: 39px; height: 39px; }
   .panel { padding: 14px; }
   .uploadForm { align-items: stretch; flex-direction: column; }
+  .templateHelp { align-items: flex-start; flex-direction: column; }
+  .templateButton { width: 100%; }
   .mappingGrid { grid-template-columns: 1fr 1fr; gap: 9px; }
   .confirmRow { align-items: flex-start; flex-direction: column; }
   .confirmRow .primaryButton { width: 100%; }

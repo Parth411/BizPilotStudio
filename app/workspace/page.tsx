@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { getCurrentCustomer } from '@/lib/auth';
 import { listMyBusinesses } from '@/lib/business';
+import { sql } from '@/lib/db';
 import styles from './workspace.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 type WorkspacePageProps = {
-  searchParams: Promise<{ business?: string | string[] }>;
+  searchParams: Promise<{ business?: string | string[]; period?: string | string[] }>;
 };
 
 const upcomingSections = [
@@ -39,7 +40,16 @@ const upcomingSections = [
 ];
 
 function displayValue(value: string | null) {
-  return value || 'Add in business settings';
+  return value || 'Not set yet';
+}
+
+function money(value: number | string, currency: string) {
+  const amount = Number(value || 0);
+  try {
+    return new Intl.NumberFormat('en', { style: 'currency', currency: currency.trim(), maximumFractionDigits: 2 }).format(amount);
+  } catch {
+    return `${amount.toFixed(2)} ${currency.trim()}`;
+  }
 }
 
 export default async function WorkspacePage({ searchParams }: WorkspacePageProps) {
@@ -48,6 +58,8 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
 
   const params = await searchParams;
   const requestedId = Array.isArray(params.business) ? params.business[0] : params.business;
+  const requestedPeriod = Array.isArray(params.period) ? params.period[0] : params.period;
+  const period = requestedPeriod === 'all' ? 'all' : 'month';
   const businesses = await listMyBusinesses();
   if (!businesses.length) {
     return (
@@ -67,6 +79,42 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
     ? businesses.find((business) => business.businessId === requestedId)
     : businesses.find((business) => business.isDefault) ?? businesses[0];
   if (!selected) redirect('/workspace');
+
+  const now = new Date();
+  const monthStart = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}-01`;
+  const nextMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1)).toISOString().slice(0, 10);
+  const rangeStart = period === 'all' ? '0001-01-01' : monthStart;
+  const rangeEnd = period === 'all' ? '9999-12-31' : nextMonth;
+  const [monthlyTotals, customerRows] = await Promise.all([
+    sql`
+      SELECT currency,
+        COALESCE(SUM(amount) FILTER (WHERE record_type = 'sale'), 0) AS sales,
+        COALESCE(SUM(amount) FILTER (WHERE record_type = 'expense'), 0) AS expenses,
+        COUNT(*) AS records
+      FROM business_transactions
+      WHERE business_id = ${selected.businessId}
+        AND transaction_date >= ${rangeStart}::date
+        AND transaction_date < ${rangeEnd}::date
+      GROUP BY currency
+      ORDER BY currency
+    `,
+    sql`
+      SELECT COUNT(DISTINCT NULLIF(BTRIM(customer_name), '')) AS customers
+      FROM business_transactions
+      WHERE business_id = ${selected.businessId}
+        AND record_type = 'sale'
+        AND transaction_date >= ${rangeStart}::date
+        AND transaction_date < ${rangeEnd}::date
+    `,
+  ]);
+  const hasPeriodData = monthlyTotals.length > 0;
+  const salesValue = hasPeriodData
+    ? monthlyTotals.map((row: any) => money(row.sales, String(row.currency))).join(' · ')
+    : `No records ${period === 'all' ? 'yet' : 'this month'}`;
+  const expensesValue = hasPeriodData
+    ? monthlyTotals.map((row: any) => money(row.expenses, String(row.currency))).join(' · ')
+    : `No records ${period === 'all' ? 'yet' : 'this month'}`;
+  const customerCount = Number((customerRows[0] as any)?.customers || 0);
 
   return (
     <section className={styles.page}>
@@ -104,7 +152,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
             <div>
               <p className={styles.eyebrow}>YOUR BUSINESS, AT A GLANCE</p>
               <h1>Welcome, {customer.first_name}.</h1>
-              <p className={styles.subtitle}>Your business tools and insights will live here.</p>
+              <p className={styles.subtitle}>A current view of imported business activity and insights.</p>
             </div>
             <form className={styles.businessPicker} action="/workspace" method="get">
               <label htmlFor="business-picker">Active business</label>
@@ -136,10 +184,11 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
             </dl>
           </section>
 
+          <div className={styles.snapshotHeader}><div><p className={styles.eyebrow}>BUSINESS SNAPSHOT</p><span>See confirmed records for a period</span></div><nav className={styles.periodToggle} aria-label="Choose summary period"><Link href={`/workspace?business=${selected.businessId}&period=month`} aria-current={period === 'month' ? 'page' : undefined} className={period === 'month' ? styles.periodActive : undefined}>This month</Link><Link href={`/workspace?business=${selected.businessId}&period=all`} aria-current={period === 'all' ? 'page' : undefined} className={period === 'all' ? styles.periodActive : undefined}>All time</Link></nav></div>
           <section className={styles.metrics} aria-label="Business data summary">
-            <article><span>SALES</span><strong>—</strong><small>Connect business data to see totals</small></article>
-            <article><span>EXPENSES</span><strong>—</strong><small>Connect business data to see totals</small></article>
-            <article><span>CUSTOMERS</span><strong>—</strong><small>Customer records will appear here</small></article>
+            <article><span>SALES · {period === 'all' ? 'ALL TIME' : 'THIS MONTH'}</span><strong className={styles.metricValue}>{salesValue}</strong><small>{hasPeriodData ? 'From confirmed imported records' : 'Import a sales file to see your total'}</small></article>
+            <article><span>EXPENSES · {period === 'all' ? 'ALL TIME' : 'THIS MONTH'}</span><strong className={styles.metricValue}>{expensesValue}</strong><small>{hasPeriodData ? 'From confirmed imported records' : 'Import an expense file to see your total'}</small></article>
+            <article><span>CUSTOMERS · {period === 'all' ? 'ALL TIME' : 'THIS MONTH'}</span><strong>{hasPeriodData ? customerCount : '—'}</strong><small>{hasPeriodData ? 'Distinct customer names in sales records' : 'Customer names appear after importing sales'}</small></article>
           </section>
 
           <section className={styles.nextStep}>

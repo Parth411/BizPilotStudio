@@ -44,8 +44,9 @@ export function SiteHeader() {
   const links = [
     ["Home", "/"],
     ["Shop", "/shop"],
+    ["Find your tool", "/tools/product-finder"],
+    ["AI Copilot", "/tools/client-growth-copilot"],
     ["Business Tools", "/shop?category=business-tools"],
-    ["Bundles", "/shop?category=bundles"],
     ["About", "/about"],
     ["Contact", "/contact"],
   ];

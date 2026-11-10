@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Import Sales and Expense Data | BizPilot Studio',
   description: 'Bring sales and expense records into your BizPilot workspace. Import a CSV or Excel file, map columns, review the preview and confirm records before adding them.',
   alternates: { canonical: '/features/import-business-data' },
+  robots: { index: true, follow: true },
   openGraph: {
     type: 'website',
     title: 'Import Business Data | BizPilot Studio',
@@ -29,7 +30,7 @@ export default function ImportBusinessDataPage() {
       <span className={styles.eyebrow}><FileSpreadsheet size={15}/> BUSINESS DATA IMPORTS</span>
       <h1>Bring your business records together.</h1>
       <p>Move sales and expense data from a spreadsheet into your BizPilot workspace. Import a file, map its columns and review the rows before confirming them.</p>
-      <div className={styles.actions}><Link className="btn primary" href="/workspace/imports">Open data imports <ArrowRight size={16}/></Link><Link className="textlink" href="/features/business-analytics">See business analytics ↗</Link></div>
+      <div className={styles.actions}><Link className="btn primary" href="/workspace/imports">Open data imports <ArrowRight size={16}/></Link><a className="textlink" href="/templates/bizpilot-import-template.xlsx" download>Download Excel template ↓</a><Link className="textlink" href="/features/business-analytics">See business analytics ↗</Link></div>
     </header>
     <section className={styles.steps} aria-labelledby="steps-heading">
       <div className={styles.sectionHeading}><small>HOW IT WORKS</small><h2 id="steps-heading">A clear review before data is added.</h2></div>

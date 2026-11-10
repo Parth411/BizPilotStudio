@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Small Business Sales and Expense Analytics | BizPilot Studio',
   description: 'Review imported business transactions with monthly sales and expense totals, sales-minus-expenses summaries, six-month trends and top product, customer and expense lists.',
   alternates: { canonical: '/features/business-analytics' },
+  robots: { index: true, follow: true },
   openGraph: {
     type: 'website',
     title: 'Business Analytics for Small Businesses | BizPilot Studio',
